@@ -1,0 +1,20 @@
+import os
+import re
+
+Import("env")
+
+m_env = env.Clone()
+
+# Add source files.
+sources = []
+for root, dirnames, filenames in os.walk("."):
+    if root == "./material_color_utilities":
+        continue
+    for filename in filenames:
+        # exclude google test file
+        if re.search(r"_test\.cc", filename):
+            continue
+        if re.search(r"\.c((c|pp)?)$", filename):
+            sources.append(Glob(os.path.join(root, filename)))
+
+m_env.add_source_files(env.modules_sources, sources)
