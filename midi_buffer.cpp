@@ -19,9 +19,9 @@ void MidiBuffer::set_midi(Ref<Midi> midi) {
 void MidiBuffer::set_sf(Ref<SoundFont> sf) {
 	this->sf = sf;
 }
-void MidiBuffer::push_buffer(int length) {
+int MidiBuffer::push_buffer(int length) {
 	if (!midi.is_valid() || !sf.is_valid()) {
-		return;
+		return 0;
 	}
 	PackedFloat32Array buffer = PackedFloat32Array();
 	while (buffer.size() < length) {
@@ -31,12 +31,13 @@ void MidiBuffer::push_buffer(int length) {
 		}
 		_tml = _tml->next;
 	}
-	if (ring_buffer.space_left() + 1 < buffer.size()) {
+	if (ring_buffer.space_left() < buffer.size()) {
 		spin_lock.lock();
 		ring_buffer.resize(msb(ring_buffer.data_left() + buffer.size()));
 		spin_lock.unlock();
 	}
 	ring_buffer.write(buffer.ptr(), buffer.size());
+	return buffer.size();
 }
 
 PackedFloat32Array MidiBuffer::get_buffer(int length) {
@@ -49,7 +50,7 @@ PackedFloat32Array MidiBuffer::get_buffer(int length) {
 	return res;
 }
 
-bool MidiBuffer::fill_audio_buffer(Ref<AudioStreamGeneratorPlayback> playback, int length) {
+int MidiBuffer::fill_audio_buffer(Ref<AudioStreamGeneratorPlayback> playback, int length) {
 	if (length == -1) {
 		length = playback->get_frames_available();
 	}
@@ -57,13 +58,13 @@ bool MidiBuffer::fill_audio_buffer(Ref<AudioStreamGeneratorPlayback> playback, i
 		running_id = WorkerThreadPool::get_singleton()->add_template_task(this, &MidiBuffer::push_buffer, rb_target_size);
 	}
 	PackedFloat32Array buffer = get_buffer(length);
-	PackedVector2Array b = PackedVector2Array();
+	PackedVector2Array b;
 	b.resize(buffer.size());
 	for (int i = 0; i < buffer.size(); i++) {
 		b.set(i, Vector2(buffer[i], buffer[i]));
 	}
 	playback->push_buffer(b);
-	return _tml != nullptr || !buffer.is_empty();
+	return buffer.size();
 }
 
 void MidiBuffer::reset_tml() {

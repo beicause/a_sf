@@ -179,9 +179,14 @@
 	#include <math.h>
 	#include <string.h>
    #include <assert.h>
+	static void free_safe(void *ptr) {
+		if (ptr != nullptr) {
+			memfree(ptr);
+		}
+	}
    #define NULL nullptr//0
    #define malloc(s)   memalloc(s)//0
-   #define free(s)     memfree(s)//((void) 0)
+   #define free(s)     free_safe(s)//((void) 0)
    #define realloc(s,sz)  memrealloc(s,sz)//0
 #endif // STB_VORBIS_NO_CRT
 

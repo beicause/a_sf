@@ -33,9 +33,9 @@ public:
 	static Ref<MidiBuffer> new_with_args(Ref<SoundFont> sf = Ref<SoundFont>(), Ref<Midi> midi = Ref<Midi>());
 	void set_midi(Ref<Midi> midi);
 	void set_sf(Ref<SoundFont> sf);
-	void push_buffer(int length);
+	int push_buffer(int length);
 	PackedFloat32Array get_buffer(int length);
-	bool fill_audio_buffer(Ref<AudioStreamGeneratorPlayback> playback, int length = -1);
+	int fill_audio_buffer(Ref<AudioStreamGeneratorPlayback> playback, int length = -1);
 	void reset_tml();
 	void stop();
 	int get_rb_init_capacity() { return rb_init_capacity; }
