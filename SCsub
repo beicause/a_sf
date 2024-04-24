@@ -8,8 +8,6 @@ m_env = env.Clone()
 # Add source files.
 sources = []
 for root, dirnames, filenames in os.walk("."):
-    if root == "./material_color_utilities":
-        continue
     for filename in filenames:
         # exclude google test file
         if re.search(r"_test\.cc", filename):

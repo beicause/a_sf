@@ -74,6 +74,11 @@
 #ifndef STB_VORBIS_INCLUDE_STB_VORBIS_H
 #define STB_VORBIS_INCLUDE_STB_VORBIS_H
 
+// my cfg begin
+#define STB_VORBIS_NO_STDIO
+#define STB_VORBIS_NO_CRT
+// my cfg end
+
 #if defined(STB_VORBIS_NO_CRT) && !defined(STB_VORBIS_NO_STDIO)
 #define STB_VORBIS_NO_STDIO 1
 #endif

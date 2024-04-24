@@ -1,8 +1,9 @@
 #include <core/os/memory.h>
 
 static void free_safe(void *ptr) {
-	if (ptr != nullptr)
+	if (ptr != nullptr) {
 		memfree(ptr);
+	}
 }
 #define TML_IMPLEMENTATION
 #define TML_NO_STDIO
@@ -211,8 +212,9 @@ Ref<Midi> Midi::next() {
 }
 
 tml_message *Midi::render_current_raw(tml_message *t, Ref<SoundFont> sf, PackedFloat32Array *buffer) {
-	if (t == nullptr)
+	if (t == nullptr) {
 		return nullptr;
+	}
 	for (; t != nullptr; t = t->next) {
 		switch (t->type) {
 			case TML_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
@@ -231,12 +233,14 @@ tml_message *Midi::render_current_raw(tml_message *t, Ref<SoundFont> sf, PackedF
 				sf->channel_midi_control(t->channel, t->control, t->control_value);
 				break;
 		}
-		if (t->next == nullptr)
+		if (t->next == nullptr) {
 			break;
+		}
 		int block_size = (t->next->time - t->time) * sf->get_out_sample_rate() / 1000;
 		// UtilityFunctions::print("next time: ", t->next->time, " time: ", t->time, " block_size: ", block_size);
-		if (block_size <= 0)
+		if (block_size <= 0) {
 			continue;
+		}
 		int prev_size = buffer->size();
 		buffer->resize(buffer->size() + block_size);
 		sf->render_float_raw(sf->get_tsf(), buffer->ptrw() + prev_size, block_size, 0);

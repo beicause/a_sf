@@ -1,7 +1,7 @@
 #pragma once
 
 // for .sf3
-#include "ogg/stb_vorbis.h"
+#include "stb/stb_vorbis.h"
 #include "tml.h"
 #include "tsf.h"
 

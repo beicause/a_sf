@@ -1,5 +1,5 @@
-#define STB_VORBIS_NO_STDIO
 #include "stb_vorbis.h"
+#include "core/os/memory.h"
 
 #ifndef STB_VORBIS_HEADER_ONLY
 
@@ -176,10 +176,13 @@
       #include <alloca.h>
    #endif
 #else // STB_VORBIS_NO_CRT
-   #define NULL 0
-   #define malloc(s)   0
-   #define free(s)     ((void) 0)
-   #define realloc(s)  0
+	#include <math.h>
+	#include <string.h>
+   #include <assert.h>
+   #define NULL nullptr//0
+   #define malloc(s)   memalloc(s)//0
+   #define free(s)     memfree(s)//((void) 0)
+   #define realloc(s,sz)  memrealloc(s,sz)//0
 #endif // STB_VORBIS_NO_CRT
 
 #include <limits.h>
