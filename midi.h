@@ -102,6 +102,29 @@ public:
 		POLY_ON
 	};
 
+	enum Keys {
+		channel,
+		time,
+		type,
+		channel_pressure,
+		key_pressure,
+		control,
+		control_value,
+		key,
+		program,
+		velocity,
+		pitch_bend,
+	};
+
+	enum InfoKeys {
+		used_channels,
+		used_programs,
+		total_notes,
+		time_first_note,
+		time_length,
+		note_count,
+	};
+
 	bool tml_header = false;
 
 	/*gd_ignore*/
@@ -118,7 +141,7 @@ public:
 	static Ref<Midi> load_simple_array(const PackedByteArray &arr, int duration_ms = 600, int channel = 0, int vel = 100);
 	static Ref<Midi> load_simple_time_array(const PackedByteArray &notes, const PackedInt32Array &times, int duration_ms = 600, int channel = 0, int vel = 100);
 
-	Array to_dicts();
+	Array to_dicts(int len = -1);
 	Array to_simple_array(int selected_channel = -1);
 	Dictionary get_info();
 	int get_tempo_value();
@@ -126,7 +149,7 @@ public:
 	Ref<Midi> next();
 
 	PackedFloat32Array render_all(Ref<SoundFont> sf);
-	Dictionary render_current(Ref<SoundFont> sf);
+	Array render_current(Ref<SoundFont> sf);
 	/*gd_ignore*/
 	static tml_message *render_current_raw(tml_message *t, Ref<SoundFont> sf, PackedFloat32Array *buffer);
 
@@ -134,3 +157,5 @@ public:
 };
 VARIANT_ENUM_CAST(Midi::MessageType);
 VARIANT_ENUM_CAST(Midi::Controller);
+VARIANT_ENUM_CAST(Midi::Keys);
+VARIANT_ENUM_CAST(Midi::InfoKeys);

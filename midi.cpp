@@ -31,44 +31,57 @@ Ref<Midi> Midi::load_memory(const PackedByteArray &buffer) {
 }
 
 Ref<Midi> Midi::load_dicts(const Array &dicts) {
-	if (dicts.size() == 0)
+	if (dicts.size() == 0) {
 		return nullptr;
+	}
 	tml_message *tml = (tml_message *)memalloc(dicts.size() * sizeof(tml_message));
 	for (int i = 0; i < dicts.size(); i++) {
 		tml_message *curr = &tml[i];
 		Dictionary dict = dicts[i];
-		if (dict.has("channel"))
-			curr->channel = dict["channel"];
-		if (dict.has("time"))
-			curr->time = dict["time"];
-		if (dict.has("type"))
-			curr->type = dict["type"];
-		if (dict.has("channel_pressure"))
-			curr->channel_pressure = (int)dict["channel_pressure"];
-		if (dict.has("key_pressure"))
-			curr->key_pressure = (int)dict["key_pressure"];
-		if (dict.has("control"))
-			curr->control = (int)dict["control"];
-		if (dict.has("control_value"))
-			curr->control_value = (int)dict["control_value"];
-		if (dict.has("key"))
-			curr->key = (int)dict["key"];
-		if (dict.has("program"))
-			curr->program = (int)dict["program"];
-		if (dict.has("velocity"))
-			curr->velocity = (int)dict["velocity"];
-		else if (curr->type == TML_NOTE_ON)
+		if (dict.has(Keys::channel)) {
+			curr->channel = dict[Keys::channel];
+		}
+		if (dict.has(Keys::time)) {
+			curr->time = dict[Keys::time];
+		}
+		if (dict.has(Keys::type)) {
+			curr->type = dict[Keys::type];
+		}
+		if (dict.has(Keys::channel_pressure)) {
+			curr->channel_pressure = (int)dict[Keys::channel_pressure];
+		}
+		if (dict.has(Keys::key_pressure)) {
+			curr->key_pressure = (int)dict[Keys::key_pressure];
+		}
+		if (dict.has(Keys::control)) {
+			curr->control = (int)dict[Keys::control];
+		}
+		if (dict.has(Keys::control_value)) {
+			curr->control_value = (int)dict[Keys::control_value];
+		}
+		if (dict.has(Keys::key)) {
+			curr->key = (int)dict[Keys::key];
+		}
+		if (dict.has(Keys::program)) {
+			curr->program = (int)dict[Keys::program];
+		}
+		if (dict.has(Keys::velocity)) {
+			curr->velocity = (int)dict[Keys::velocity];
+		} else if (curr->type == TML_NOTE_ON) {
 			curr->velocity = 100;
-		if (dict.has("pitch_bend"))
-			curr->pitch_bend = dict["pitch_bend"];
+		}
+		if (dict.has(Keys::pitch_bend)) {
+			curr->pitch_bend = dict[Keys::pitch_bend];
+		}
 		curr->next = i + 1 < dicts.size() ? &tml[i + 1] : nullptr;
 	}
 	return new_from_tml(tml);
 }
 
 Ref<Midi> Midi::load_simple_array(const PackedByteArray &arr, int duration_ms, int channel, int vel) {
-	if (arr.size() == 0)
+	if (arr.size() == 0) {
 		return nullptr;
+	}
 	tml_message *tml = (tml_message *)memalloc(arr.size() * 2 * sizeof(tml_message));
 	for (int i = 0; i < arr.size(); i++) {
 		tml_message *curr = &tml[i * 2];
@@ -90,8 +103,9 @@ Ref<Midi> Midi::load_simple_array(const PackedByteArray &arr, int duration_ms, i
 }
 
 Ref<Midi> Midi::load_simple_time_array(const PackedByteArray &notes, const PackedInt32Array &times, int duration_ms, int channel, int vel) {
-	if (notes.size() == 0)
+	if (notes.size() == 0) {
 		return nullptr;
+	}
 	tml_message *tml = (tml_message *)memalloc(notes.size() * 2 * sizeof(tml_message));
 	for (int i = 0; i < notes.size(); i++) {
 		tml_message *curr = &tml[i * 2];
@@ -112,21 +126,24 @@ Ref<Midi> Midi::load_simple_time_array(const PackedByteArray &notes, const Packe
 	return new_from_tml(tml);
 }
 
-Array Midi::to_dicts() {
+Array Midi::to_dicts(int len) {
 	Array res;
 	for (tml_message *curr = _tml; curr != nullptr; curr = curr->next) {
+		if (len >= 0 && res.size() >= len) {
+			break;
+		}
 		Dictionary dict;
-		dict["channel"] = curr->channel;
-		dict["time"] = curr->time;
-		dict["type"] = curr->type;
-		dict["channel_pressure"] = curr->channel_pressure;
-		dict["key_pressure"] = curr->key_pressure;
-		dict["control"] = curr->control;
-		dict["control_value"] = curr->control_value;
-		dict["key"] = curr->key;
-		dict["program"] = curr->program;
-		dict["velocity"] = curr->velocity;
-		dict["pitch_bend"] = curr->pitch_bend;
+		dict[Keys::channel] = curr->channel;
+		dict[Keys::time] = curr->time;
+		dict[Keys::type] = curr->type;
+		dict[Keys::channel_pressure] = curr->channel_pressure;
+		dict[Keys::key_pressure] = curr->key_pressure;
+		dict[Keys::control] = curr->control;
+		dict[Keys::control_value] = curr->control_value;
+		dict[Keys::key] = curr->key;
+		dict[Keys::program] = curr->program;
+		dict[Keys::velocity] = curr->velocity;
+		dict[Keys::pitch_bend] = curr->pitch_bend;
 		res.append(dict);
 	}
 	return res;
@@ -136,11 +153,12 @@ Array Midi::to_simple_array(int channel) {
 	Array res;
 	PackedByteArray notes;
 	PackedInt32Array times;
-	for (tml_message *curr = _tml; curr != nullptr; curr = curr->next)
+	for (tml_message *curr = _tml; curr != nullptr; curr = curr->next) {
 		if (curr->type == NOTE_ON && (channel < 0 || curr->channel == channel)) {
 			notes.append(curr->key);
 			times.append(curr->time);
 		}
+	}
 	res.append(notes);
 	res.append(times);
 	return res;
@@ -161,12 +179,12 @@ Dictionary Midi::get_info() {
 	unsigned int time_length = -1;
 	int note_count = tml_get_info(_tml, &used_channels, &used_programs, &total_notes, &time_first_note, &time_length);
 	Dictionary res = Dictionary();
-	res["used_channels"] = used_channels;
-	res["used_programs"] = used_programs;
-	res["total_notes"] = total_notes;
-	res["time_first_note"] = time_first_note;
-	res["time_length"] = time_length;
-	res["note_count"] = note_count;
+	res[InfoKeys::used_channels] = used_channels;
+	res[InfoKeys::used_programs] = used_programs;
+	res[InfoKeys::total_notes] = total_notes;
+	res[InfoKeys::time_first_note] = time_first_note;
+	res[InfoKeys::time_length] = time_length;
+	res[InfoKeys::note_count] = note_count;
 	return res;
 }
 
@@ -188,17 +206,17 @@ Dictionary Midi::read_msg() {
 	char velocity = _tml->velocity;
 	unsigned short pitch_bend = _tml->pitch_bend;
 	Dictionary res = Dictionary();
-	res["time"] = time;
-	res["type"] = type;
-	res["channel"] = channel;
-	res["channel_pressure"] = channel_pressure;
-	res["key_pressure"] = key_pressure;
-	res["control"] = control;
-	res["control_value"] = control_value;
-	res["key"] = key;
-	res["program"] = program;
-	res["velocity"] = velocity;
-	res["pitch_bend"] = pitch_bend;
+	res[time] = time;
+	res[type] = type;
+	res[Keys::channel] = channel;
+	res[channel_pressure] = channel_pressure;
+	res[Keys::key_pressure] = key_pressure;
+	res[Keys::control] = control;
+	res[Keys::control_value] = control_value;
+	res[Keys::key] = key;
+	res[Keys::program] = program;
+	res[Keys::velocity] = velocity;
+	res[Keys::pitch_bend] = pitch_bend;
 	return res;
 }
 
@@ -249,19 +267,17 @@ tml_message *Midi::render_current_raw(tml_message *t, Ref<SoundFont> sf, PackedF
 	return t;
 }
 
-Dictionary Midi::render_current(Ref<SoundFont> sf) {
-	Dictionary res = Dictionary();
+Array Midi::render_current(Ref<SoundFont> sf) {
+	Array res;
 	PackedFloat32Array buffer = PackedFloat32Array();
 	tml_message *t = render_current_raw(_tml, sf, &buffer);
-	res["buffer"] = buffer;
-	Ref<Midi> current = memnew(Midi);
-	// Ref<Midi> next = memnew(Midi);
-	current->_set_tml_raw(t);
-	// next->_set_tml_raw(t->next);
-	res["current"] = current;
-	// res["next"] = next;
+	res.push_back(buffer);
+	Ref<Midi> res_midi = memnew(Midi);
+	res_midi->_set_tml_raw(t);
+	res.push_back(res_midi);
 	return res;
 }
+
 PackedFloat32Array Midi::render_all(Ref<SoundFont> sf) {
 	PackedFloat32Array res = PackedFloat32Array();
 	for (tml_message *t = _tml; t != nullptr; t = t->next) {
@@ -282,11 +298,13 @@ PackedFloat32Array Midi::render_all(Ref<SoundFont> sf) {
 				sf->channel_midi_control(t->channel, t->control, t->control_value);
 				break;
 		}
-		if (t->next == nullptr)
+		if (t->next == nullptr) {
 			break;
+		}
 		int block_size = (t->next->time - t->time) * sf->get_out_sample_rate() / 1000;
-		if (block_size <= 0)
+		if (block_size <= 0) {
 			continue;
+		}
 		int prev_size = res.size();
 		res.resize(res.size() + block_size);
 		sf->render_float_raw(sf->get_tsf(), res.ptrw() + prev_size, block_size, 0);
@@ -295,8 +313,9 @@ PackedFloat32Array Midi::render_all(Ref<SoundFont> sf) {
 }
 
 Midi::~Midi() {
-	if (is_tml_header())
+	if (is_tml_header()) {
 		tml_free(_tml);
+	}
 };
 
 void Midi::_bind_methods() {
@@ -382,6 +401,25 @@ void Midi::_bind_methods() {
 	BIND_ENUM_CONSTANT(POLY_OFF);
 	BIND_ENUM_CONSTANT(POLY_ON);
 
+	BIND_ENUM_CONSTANT(channel);
+	BIND_ENUM_CONSTANT(time);
+	BIND_ENUM_CONSTANT(type);
+	BIND_ENUM_CONSTANT(channel_pressure);
+	BIND_ENUM_CONSTANT(key_pressure);
+	BIND_ENUM_CONSTANT(control);
+	BIND_ENUM_CONSTANT(control_value);
+	BIND_ENUM_CONSTANT(key);
+	BIND_ENUM_CONSTANT(program);
+	BIND_ENUM_CONSTANT(velocity);
+	BIND_ENUM_CONSTANT(pitch_bend);
+
+	BIND_ENUM_CONSTANT(used_channels);
+	BIND_ENUM_CONSTANT(used_programs);
+	BIND_ENUM_CONSTANT(total_notes);
+	BIND_ENUM_CONSTANT(time_first_note);
+	BIND_ENUM_CONSTANT(time_length);
+	BIND_ENUM_CONSTANT(note_count);
+
 	ClassDB::bind_static_method("Midi", D_METHOD("load_path", "path"), &Midi::load_path);
 	ClassDB::bind_static_method("Midi", D_METHOD("load_file", "file"), &Midi::load_file);
 	ClassDB::bind_static_method("Midi", D_METHOD("load_memory", "buffer"), &Midi::load_memory);
@@ -389,7 +427,7 @@ void Midi::_bind_methods() {
 	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_array", "arr", "duration_ms", "channel", "vel"), &Midi::load_simple_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
 	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_time_array", "notes", "times", "duration_ms", "channel", "vel"), &Midi::load_simple_time_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
 
-	ClassDB::bind_method(D_METHOD("to_dicts"), &Midi::to_dicts);
+	ClassDB::bind_method(D_METHOD("to_dicts","len"), &Midi::to_dicts, DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("to_simple_array", "selected_channel"), &Midi::to_simple_array, DEFVAL(-1));
 
 	ClassDB::bind_method(D_METHOD("get_info"), &Midi::get_info);
