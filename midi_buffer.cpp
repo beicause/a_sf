@@ -51,6 +51,9 @@ PackedFloat32Array MidiBuffer::get_buffer(int length) {
 }
 
 int MidiBuffer::fill_audio_buffer(Ref<AudioStreamGeneratorPlayback> playback, int length) {
+	if (_tml == nullptr) {
+		return -1;
+	}
 	if (length == -1) {
 		length = playback->get_frames_available();
 	}
