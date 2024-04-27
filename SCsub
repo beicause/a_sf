@@ -6,13 +6,5 @@ Import("env")
 m_env = env.Clone()
 
 # Add source files.
-sources = []
-for root, dirnames, filenames in os.walk("."):
-    for filename in filenames:
-        # exclude google test file
-        if re.search(r"_test\.cc", filename):
-            continue
-        if re.search(r"\.c((c|pp)?)$", filename):
-            sources.append(Glob(os.path.join(root, filename)))
-
+sources = [env.Glob("*.cpp"),env.Glob("stb/*.cpp")]
 m_env.add_source_files(env.modules_sources, sources)

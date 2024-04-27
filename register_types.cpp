@@ -3,7 +3,7 @@
 #include "midi_buffer.h"
 #include "sound_font.h"
 
-void initialize_a_my_sf_module(ModuleInitializationLevel p_level) {
+void initialize_a_sf_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
@@ -12,7 +12,7 @@ void initialize_a_my_sf_module(ModuleInitializationLevel p_level) {
 	ClassDB::register_class<MidiBuffer>();
 }
 
-void uninitialize_a_my_sf_module(ModuleInitializationLevel p_level) {
+void uninitialize_a_sf_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
