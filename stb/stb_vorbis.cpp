@@ -184,7 +184,6 @@
 			memfree(ptr);
 		}
 	}
-   #define NULL nullptr//0
    #define malloc(s)   memalloc(s)//0
    #define free(s)     free_safe(s)//((void) 0)
    #define realloc(s,sz)  memrealloc(s,sz)//0

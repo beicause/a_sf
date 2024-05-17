@@ -1,6 +1,5 @@
 #pragma once
 #include "core/object/ref_counted.h"
-#define NULL nullptr //0
 #define malloc(s) memalloc(s) //0
 #define free(s) memfree(s) //((void) 0)
 #define realloc(s, sz) memrealloc(s, sz) //0
@@ -46,3 +45,7 @@ public:
 	//               osc: pointer to a Hexwave initialized with 'hexwave_create'
 	//   oscillator_freq: frequency of the oscillator divided by the sample rate
 };
+
+#undef malloc
+#undef free
+#undef realloc
