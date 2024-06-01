@@ -11,13 +11,13 @@ Ref<MidiBuffer> MidiBuffer::new_with_args(Ref<SoundFont> sf, Ref<Midi> midi) {
 	return buf;
 }
 
-void MidiBuffer::set_midi(Ref<Midi> midi) {
-	this->midi = midi;
+void MidiBuffer::set_midi(Ref<Midi> _midi) {
+	this->midi = _midi;
 	_tml = midi->_get_tml_raw();
 	ring_buffer.clear();
 }
-void MidiBuffer::set_sf(Ref<SoundFont> sf) {
-	this->sf = sf;
+void MidiBuffer::set_sf(Ref<SoundFont> _sf) {
+	this->sf = _sf;
 }
 int MidiBuffer::push_buffer(int length) {
 	if (!midi.is_valid() || !sf.is_valid()) {
