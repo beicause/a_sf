@@ -38,40 +38,40 @@ Ref<Midi> Midi::load_dicts(const Array &dicts) {
 	for (int i = 0; i < dicts.size(); i++) {
 		tml_message *curr = &tml[i];
 		Dictionary dict = dicts[i];
-		if (dict.has(Keys::channel)) {
-			curr->channel = dict[Keys::channel];
+		if (dict.has(Keys::K_CHANNEL)) {
+			curr->channel = dict[Keys::K_CHANNEL];
 		}
-		if (dict.has(Keys::time)) {
-			curr->time = dict[Keys::time];
+		if (dict.has(Keys::K_TIME)) {
+			curr->time = dict[Keys::K_TIME];
 		}
-		if (dict.has(Keys::type)) {
-			curr->type = dict[Keys::type];
+		if (dict.has(Keys::K_TYPE)) {
+			curr->type = dict[Keys::K_TYPE];
 		}
-		if (dict.has(Keys::channel_pressure)) {
-			curr->channel_pressure = (int)dict[Keys::channel_pressure];
+		if (dict.has(Keys::K_CHANNEL_PRESSURE)) {
+			curr->channel_pressure = (int)dict[Keys::K_CHANNEL_PRESSURE];
 		}
-		if (dict.has(Keys::key_pressure)) {
-			curr->key_pressure = (int)dict[Keys::key_pressure];
+		if (dict.has(Keys::K_KEY_PRESSURE)) {
+			curr->key_pressure = (int)dict[Keys::K_KEY_PRESSURE];
 		}
-		if (dict.has(Keys::control)) {
-			curr->control = (int)dict[Keys::control];
+		if (dict.has(Keys::K_CONTROL)) {
+			curr->control = (int)dict[Keys::K_CONTROL];
 		}
-		if (dict.has(Keys::control_value)) {
-			curr->control_value = (int)dict[Keys::control_value];
+		if (dict.has(Keys::K_CONTROL_VALUE)) {
+			curr->control_value = (int)dict[Keys::K_CONTROL_VALUE];
 		}
-		if (dict.has(Keys::key)) {
-			curr->key = (int)dict[Keys::key];
+		if (dict.has(Keys::K_KEY)) {
+			curr->key = (int)dict[Keys::K_KEY];
 		}
-		if (dict.has(Keys::program)) {
-			curr->program = (int)dict[Keys::program];
+		if (dict.has(Keys::K_PROGRAM)) {
+			curr->program = (int)dict[Keys::K_PROGRAM];
 		}
-		if (dict.has(Keys::velocity)) {
-			curr->velocity = (int)dict[Keys::velocity];
+		if (dict.has(Keys::K_VELOCITY)) {
+			curr->velocity = (int)dict[Keys::K_VELOCITY];
 		} else if (curr->type == TML_NOTE_ON) {
 			curr->velocity = 100;
 		}
-		if (dict.has(Keys::pitch_bend)) {
-			curr->pitch_bend = dict[Keys::pitch_bend];
+		if (dict.has(Keys::K_PITCH_BEND)) {
+			curr->pitch_bend = dict[Keys::K_PITCH_BEND];
 		}
 		curr->next = i + 1 < dicts.size() ? &tml[i + 1] : nullptr;
 	}
@@ -133,28 +133,28 @@ Array Midi::to_dicts(int len) {
 			break;
 		}
 		Dictionary dict;
-		dict[Keys::channel] = curr->channel;
-		dict[Keys::time] = curr->time;
-		dict[Keys::type] = curr->type;
-		dict[Keys::channel_pressure] = curr->channel_pressure;
-		dict[Keys::key_pressure] = curr->key_pressure;
-		dict[Keys::control] = curr->control;
-		dict[Keys::control_value] = curr->control_value;
-		dict[Keys::key] = curr->key;
-		dict[Keys::program] = curr->program;
-		dict[Keys::velocity] = curr->velocity;
-		dict[Keys::pitch_bend] = curr->pitch_bend;
+		dict[Keys::K_CHANNEL] = curr->channel;
+		dict[Keys::K_TIME] = curr->time;
+		dict[Keys::K_TYPE] = curr->type;
+		dict[Keys::K_CHANNEL_PRESSURE] = curr->channel_pressure;
+		dict[Keys::K_KEY_PRESSURE] = curr->key_pressure;
+		dict[Keys::K_CONTROL] = curr->control;
+		dict[Keys::K_CONTROL_VALUE] = curr->control_value;
+		dict[Keys::K_KEY] = curr->key;
+		dict[Keys::K_PROGRAM] = curr->program;
+		dict[Keys::K_VELOCITY] = curr->velocity;
+		dict[Keys::K_PITCH_BEND] = curr->pitch_bend;
 		res.append(dict);
 	}
 	return res;
 }
 
-Array Midi::to_simple_array(int channel) {
+Array Midi::to_simple_array(int p_channel) {
 	Array res;
 	PackedByteArray notes;
 	PackedInt32Array times;
 	for (tml_message *curr = _tml; curr != nullptr; curr = curr->next) {
-		if (curr->type == NOTE_ON && (channel < 0 || curr->channel == channel)) {
+		if (curr->type == NOTE_ON && (p_channel < 0 || curr->channel == p_channel)) {
 			notes.append(curr->key);
 			times.append(curr->time);
 		}
@@ -179,12 +179,12 @@ Dictionary Midi::get_info() {
 	unsigned int time_length = -1;
 	int note_count = tml_get_info(_tml, &used_channels, &used_programs, &total_notes, &time_first_note, &time_length);
 	Dictionary res = Dictionary();
-	res[InfoKeys::used_channels] = used_channels;
-	res[InfoKeys::used_programs] = used_programs;
-	res[InfoKeys::total_notes] = total_notes;
-	res[InfoKeys::time_first_note] = time_first_note;
-	res[InfoKeys::time_length] = time_length;
-	res[InfoKeys::note_count] = note_count;
+	res[InfoKeys::K_USED_CHANNELS] = used_channels;
+	res[InfoKeys::K_USED_PROGRAMS] = used_programs;
+	res[InfoKeys::K_TOTAL_NOTES] = total_notes;
+	res[InfoKeys::K_TIME_FIRST_NOTE] = time_first_note;
+	res[InfoKeys::K_TIME_LENGTH] = time_length;
+	res[InfoKeys::K_NOTE_COUNT] = note_count;
 	return res;
 }
 
@@ -208,15 +208,15 @@ Dictionary Midi::read_msg() {
 	Dictionary res = Dictionary();
 	res[time] = time;
 	res[type] = type;
-	res[Keys::channel] = channel;
+	res[Keys::K_CHANNEL] = channel;
 	res[channel_pressure] = channel_pressure;
-	res[Keys::key_pressure] = key_pressure;
-	res[Keys::control] = control;
-	res[Keys::control_value] = control_value;
-	res[Keys::key] = key;
-	res[Keys::program] = program;
-	res[Keys::velocity] = velocity;
-	res[Keys::pitch_bend] = pitch_bend;
+	res[Keys::K_KEY_PRESSURE] = key_pressure;
+	res[Keys::K_CONTROL] = control;
+	res[Keys::K_CONTROL_VALUE] = control_value;
+	res[Keys::K_KEY] = key;
+	res[Keys::K_PROGRAM] = program;
+	res[Keys::K_VELOCITY] = velocity;
+	res[Keys::K_PITCH_BEND] = pitch_bend;
 	return res;
 }
 
@@ -401,24 +401,24 @@ void Midi::_bind_methods() {
 	BIND_ENUM_CONSTANT(POLY_OFF);
 	BIND_ENUM_CONSTANT(POLY_ON);
 
-	BIND_ENUM_CONSTANT(channel);
-	BIND_ENUM_CONSTANT(time);
-	BIND_ENUM_CONSTANT(type);
-	BIND_ENUM_CONSTANT(channel_pressure);
-	BIND_ENUM_CONSTANT(key_pressure);
-	BIND_ENUM_CONSTANT(control);
-	BIND_ENUM_CONSTANT(control_value);
-	BIND_ENUM_CONSTANT(key);
-	BIND_ENUM_CONSTANT(program);
-	BIND_ENUM_CONSTANT(velocity);
-	BIND_ENUM_CONSTANT(pitch_bend);
+	BIND_ENUM_CONSTANT(Keys::K_CHANNEL);
+	BIND_ENUM_CONSTANT(Keys::K_TIME);
+	BIND_ENUM_CONSTANT(Keys::K_TYPE);
+	BIND_ENUM_CONSTANT(Keys::K_CHANNEL_PRESSURE);
+	BIND_ENUM_CONSTANT(Keys::K_KEY_PRESSURE);
+	BIND_ENUM_CONSTANT(Keys::K_CONTROL);
+	BIND_ENUM_CONSTANT(Keys::K_CONTROL_VALUE);
+	BIND_ENUM_CONSTANT(Keys::K_KEY);
+	BIND_ENUM_CONSTANT(Keys::K_PROGRAM);
+	BIND_ENUM_CONSTANT(Keys::K_VELOCITY);
+	BIND_ENUM_CONSTANT(Keys::K_PITCH_BEND);
 
-	BIND_ENUM_CONSTANT(used_channels);
-	BIND_ENUM_CONSTANT(used_programs);
-	BIND_ENUM_CONSTANT(total_notes);
-	BIND_ENUM_CONSTANT(time_first_note);
-	BIND_ENUM_CONSTANT(time_length);
-	BIND_ENUM_CONSTANT(note_count);
+	BIND_ENUM_CONSTANT(InfoKeys::K_USED_CHANNELS);
+	BIND_ENUM_CONSTANT(InfoKeys::K_USED_PROGRAMS);
+	BIND_ENUM_CONSTANT(InfoKeys::K_TOTAL_NOTES);
+	BIND_ENUM_CONSTANT(InfoKeys::K_TIME_FIRST_NOTE);
+	BIND_ENUM_CONSTANT(InfoKeys::K_TIME_LENGTH);
+	BIND_ENUM_CONSTANT(InfoKeys::K_NOTE_COUNT);
 
 	ClassDB::bind_static_method("Midi", D_METHOD("load_path", "path"), &Midi::load_path);
 	ClassDB::bind_static_method("Midi", D_METHOD("load_file", "file"), &Midi::load_file);
@@ -427,7 +427,7 @@ void Midi::_bind_methods() {
 	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_array", "arr", "duration_ms", "channel", "vel"), &Midi::load_simple_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
 	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_time_array", "notes", "times", "duration_ms", "channel", "vel"), &Midi::load_simple_time_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
 
-	ClassDB::bind_method(D_METHOD("to_dicts","len"), &Midi::to_dicts, DEFVAL(-1));
+	ClassDB::bind_method(D_METHOD("to_dicts", "len"), &Midi::to_dicts, DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("to_simple_array", "selected_channel"), &Midi::to_simple_array, DEFVAL(-1));
 
 	ClassDB::bind_method(D_METHOD("get_info"), &Midi::get_info);

@@ -103,26 +103,26 @@ public:
 	};
 
 	enum Keys {
-		channel,
-		time,
-		type,
-		channel_pressure,
-		key_pressure,
-		control,
-		control_value,
-		key,
-		program,
-		velocity,
-		pitch_bend,
+		K_CHANNEL,
+		K_TIME,
+		K_TYPE,
+		K_CHANNEL_PRESSURE,
+		K_KEY_PRESSURE,
+		K_CONTROL,
+		K_CONTROL_VALUE,
+		K_KEY,
+		K_PROGRAM,
+		K_VELOCITY,
+		K_PITCH_BEND,
 	};
 
 	enum InfoKeys {
-		used_channels,
-		used_programs,
-		total_notes,
-		time_first_note,
-		time_length,
-		note_count,
+		K_USED_CHANNELS,
+		K_USED_PROGRAMS,
+		K_TOTAL_NOTES,
+		K_TIME_FIRST_NOTE,
+		K_TIME_LENGTH,
+		K_NOTE_COUNT,
 	};
 
 	bool tml_header = false;
