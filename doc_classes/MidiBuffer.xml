@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MidiBuffer" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="fill_audio_buffer">
+			<return type="int" />
+			<param index="0" name="playback" type="AudioStreamGeneratorPlayback" />
+			<param index="1" name="length" type="int" default="-1" />
+			<description>
+			</description>
+		</method>
+		<method name="get_buffer">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="length" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="new_with_args" qualifiers="static">
+			<return type="MidiBuffer" />
+			<param index="0" name="sf" type="SoundFont" default="null" />
+			<param index="1" name="midi" type="Midi" default="null" />
+			<description>
+			</description>
+		</method>
+		<method name="push_buffer">
+			<return type="int" />
+			<param index="0" name="length" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="reset_tml">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="set_midi">
+			<return type="void" />
+			<param index="0" name="midi" type="Midi" />
+			<description>
+			</description>
+		</method>
+		<method name="set_sf">
+			<return type="void" />
+			<param index="0" name="sf" type="SoundFont" />
+			<description>
+			</description>
+		</method>
+		<method name="stop">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="rb_init_capacity" type="int" setter="set_rb_init_capacity" getter="get_rb_init_capacity" default="22050">
+		</member>
+		<member name="rb_target_size" type="int" setter="set_rb_target_size" getter="get_rb_target_size" default="44100">
+		</member>
+	</members>
+</class>

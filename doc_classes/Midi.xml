@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Midi" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_info">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_tempo_value">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="is_tml_header">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="load_dicts" qualifiers="static">
+			<return type="Midi" />
+			<param index="0" name="dicts" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="load_file" qualifiers="static">
+			<return type="Midi" />
+			<param index="0" name="file" type="FileAccess" />
+			<description>
+			</description>
+		</method>
+		<method name="load_memory" qualifiers="static">
+			<return type="Midi" />
+			<param index="0" name="buffer" type="PackedByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="load_path" qualifiers="static">
+			<return type="Midi" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_simple_array" qualifiers="static">
+			<return type="Midi" />
+			<param index="0" name="arr" type="PackedByteArray" />
+			<param index="1" name="duration_ms" type="int" default="600" />
+			<param index="2" name="channel" type="int" default="0" />
+			<param index="3" name="vel" type="int" default="100" />
+			<description>
+			</description>
+		</method>
+		<method name="load_simple_time_array" qualifiers="static">
+			<return type="Midi" />
+			<param index="0" name="notes" type="PackedByteArray" />
+			<param index="1" name="times" type="PackedInt32Array" />
+			<param index="2" name="duration_ms" type="int" default="600" />
+			<param index="3" name="channel" type="int" default="0" />
+			<param index="4" name="vel" type="int" default="100" />
+			<description>
+			</description>
+		</method>
+		<method name="next">
+			<return type="Midi" />
+			<description>
+			</description>
+		</method>
+		<method name="read_msg">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="render_all">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="sf" type="SoundFont" />
+			<description>
+			</description>
+		</method>
+		<method name="render_current">
+			<return type="Array" />
+			<param index="0" name="sf" type="SoundFont" />
+			<description>
+			</description>
+		</method>
+		<method name="to_dicts">
+			<return type="Array" />
+			<param index="0" name="len" type="int" default="-1" />
+			<description>
+			</description>
+		</method>
+		<method name="to_simple_array">
+			<return type="Array" />
+			<param index="0" name="selected_channel" type="int" default="-1" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="NOTE_OFF" value="128" enum="MessageType">
+		</constant>
+		<constant name="NOTE_ON" value="144" enum="MessageType">
+		</constant>
+		<constant name="KEY_PRESSURE" value="160" enum="MessageType">
+		</constant>
+		<constant name="CONTROL_CHANGE" value="176" enum="MessageType">
+		</constant>
+		<constant name="PROGRAM_CHANGE" value="192" enum="MessageType">
+		</constant>
+		<constant name="CHANNEL_PRESSURE" value="208" enum="MessageType">
+		</constant>
+		<constant name="PITCH_BEND" value="224" enum="MessageType">
+		</constant>
+		<constant name="SET_TEMPO" value="81" enum="MessageType">
+		</constant>
+		<constant name="BANK_SELECT_MSB" value="0" enum="Controller">
+		</constant>
+		<constant name="MODULATIONWHEEL_MSB" value="1" enum="Controller">
+		</constant>
+		<constant name="BREATH_MSB" value="2" enum="Controller">
+		</constant>
+		<constant name="FOOT_MSB" value="4" enum="Controller">
+		</constant>
+		<constant name="PORTAMENTO_TIME_MSB" value="5" enum="Controller">
+		</constant>
+		<constant name="DATA_ENTRY_MSB" value="6" enum="Controller">
+		</constant>
+		<constant name="VOLUME_MSB" value="7" enum="Controller">
+		</constant>
+		<constant name="BALANCE_MSB" value="8" enum="Controller">
+		</constant>
+		<constant name="PAN_MSB" value="10" enum="Controller">
+		</constant>
+		<constant name="EXPRESSION_MSB" value="11" enum="Controller">
+		</constant>
+		<constant name="EFFECTS1_MSB" value="12" enum="Controller">
+		</constant>
+		<constant name="EFFECTS2_MSB" value="13" enum="Controller">
+		</constant>
+		<constant name="GPC1_MSB" value="16" enum="Controller">
+		</constant>
+		<constant name="GPC2_MSB" value="17" enum="Controller">
+		</constant>
+		<constant name="GPC3_MSB" value="18" enum="Controller">
+		</constant>
+		<constant name="GPC4_MSB" value="19" enum="Controller">
+		</constant>
+		<constant name="BANK_SELECT_LSB" value="32" enum="Controller">
+		</constant>
+		<constant name="MODULATIONWHEEL_LSB" value="33" enum="Controller">
+		</constant>
+		<constant name="BREATH_LSB" value="34" enum="Controller">
+		</constant>
+		<constant name="FOOT_LSB" value="36" enum="Controller">
+		</constant>
+		<constant name="PORTAMENTO_TIME_LSB" value="37" enum="Controller">
+		</constant>
+		<constant name="DATA_ENTRY_LSB" value="38" enum="Controller">
+		</constant>
+		<constant name="VOLUME_LSB" value="39" enum="Controller">
+		</constant>
+		<constant name="BALANCE_LSB" value="40" enum="Controller">
+		</constant>
+		<constant name="PAN_LSB" value="42" enum="Controller">
+		</constant>
+		<constant name="EXPRESSION_LSB" value="43" enum="Controller">
+		</constant>
+		<constant name="EFFECTS1_LSB" value="44" enum="Controller">
+		</constant>
+		<constant name="EFFECTS2_LSB" value="45" enum="Controller">
+		</constant>
+		<constant name="GPC1_LSB" value="48" enum="Controller">
+		</constant>
+		<constant name="GPC2_LSB" value="49" enum="Controller">
+		</constant>
+		<constant name="GPC3_LSB" value="50" enum="Controller">
+		</constant>
+		<constant name="GPC4_LSB" value="51" enum="Controller">
+		</constant>
+		<constant name="SUSTAIN_SWITCH" value="64" enum="Controller">
+		</constant>
+		<constant name="PORTAMENTO_SWITCH" value="65" enum="Controller">
+		</constant>
+		<constant name="SOSTENUTO_SWITCH" value="66" enum="Controller">
+		</constant>
+		<constant name="SOFT_PEDAL_SWITCH" value="67" enum="Controller">
+		</constant>
+		<constant name="LEGATO_SWITCH" value="68" enum="Controller">
+		</constant>
+		<constant name="HOLD2_SWITCH" value="69" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL1" value="70" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL2" value="71" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL3" value="72" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL4" value="73" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL5" value="74" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL6" value="75" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL7" value="76" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL8" value="77" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL9" value="78" enum="Controller">
+		</constant>
+		<constant name="SOUND_CTRL10" value="79" enum="Controller">
+		</constant>
+		<constant name="GPC5" value="80" enum="Controller">
+		</constant>
+		<constant name="GPC6" value="81" enum="Controller">
+		</constant>
+		<constant name="GPC7" value="82" enum="Controller">
+		</constant>
+		<constant name="GPC8" value="83" enum="Controller">
+		</constant>
+		<constant name="PORTAMENTO_CTRL" value="84" enum="Controller">
+		</constant>
+		<constant name="FX_REVERB" value="91" enum="Controller">
+		</constant>
+		<constant name="FX_TREMOLO" value="92" enum="Controller">
+		</constant>
+		<constant name="FX_CHORUS" value="93" enum="Controller">
+		</constant>
+		<constant name="FX_CELESTE_DETUNE" value="94" enum="Controller">
+		</constant>
+		<constant name="FX_PHASER" value="95" enum="Controller">
+		</constant>
+		<constant name="DATA_ENTRY_INCR" value="96" enum="Controller">
+		</constant>
+		<constant name="DATA_ENTRY_DECR" value="97" enum="Controller">
+		</constant>
+		<constant name="NRPN_LSB" value="98" enum="Controller">
+		</constant>
+		<constant name="NRPN_MSB" value="99" enum="Controller">
+		</constant>
+		<constant name="RPN_LSB" value="100" enum="Controller">
+		</constant>
+		<constant name="RPN_MSB" value="101" enum="Controller">
+		</constant>
+		<constant name="ALL_SOUND_OFF" value="120" enum="Controller">
+		</constant>
+		<constant name="ALL_CTRL_OFF" value="121" enum="Controller">
+		</constant>
+		<constant name="LOCAL_CONTROL" value="122" enum="Controller">
+		</constant>
+		<constant name="ALL_NOTES_OFF" value="123" enum="Controller">
+		</constant>
+		<constant name="OMNI_OFF" value="124" enum="Controller">
+		</constant>
+		<constant name="OMNI_ON" value="125" enum="Controller">
+		</constant>
+		<constant name="POLY_OFF" value="126" enum="Controller">
+		</constant>
+		<constant name="POLY_ON" value="127" enum="Controller">
+		</constant>
+		<constant name="Keys::K_CHANNEL" value="0" enum="Keys">
+		</constant>
+		<constant name="Keys::K_TIME" value="1" enum="Keys">
+		</constant>
+		<constant name="Keys::K_TYPE" value="2" enum="Keys">
+		</constant>
+		<constant name="Keys::K_CHANNEL_PRESSURE" value="3" enum="Keys">
+		</constant>
+		<constant name="Keys::K_KEY_PRESSURE" value="4" enum="Keys">
+		</constant>
+		<constant name="Keys::K_CONTROL" value="5" enum="Keys">
+		</constant>
+		<constant name="Keys::K_CONTROL_VALUE" value="6" enum="Keys">
+		</constant>
+		<constant name="Keys::K_KEY" value="7" enum="Keys">
+		</constant>
+		<constant name="Keys::K_PROGRAM" value="8" enum="Keys">
+		</constant>
+		<constant name="Keys::K_VELOCITY" value="9" enum="Keys">
+		</constant>
+		<constant name="Keys::K_PITCH_BEND" value="10" enum="Keys">
+		</constant>
+		<constant name="InfoKeys::K_USED_CHANNELS" value="0" enum="InfoKeys">
+		</constant>
+		<constant name="InfoKeys::K_USED_PROGRAMS" value="1" enum="InfoKeys">
+		</constant>
+		<constant name="InfoKeys::K_TOTAL_NOTES" value="2" enum="InfoKeys">
+		</constant>
+		<constant name="InfoKeys::K_TIME_FIRST_NOTE" value="3" enum="InfoKeys">
+		</constant>
+		<constant name="InfoKeys::K_TIME_LENGTH" value="4" enum="InfoKeys">
+		</constant>
+		<constant name="InfoKeys::K_NOTE_COUNT" value="5" enum="InfoKeys">
+		</constant>
+	</constants>
+</class>

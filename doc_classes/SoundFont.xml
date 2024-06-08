@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SoundFont" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="active_voice_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="bank_get_preset_name">
+			<return type="String" />
+			<param index="0" name="bank" type="int" />
+			<param index="1" name="preset_number" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="bank_note_off">
+			<return type="int" />
+			<param index="0" name="bank" type="int" />
+			<param index="1" name="preset_number" type="int" />
+			<param index="2" name="key" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="bank_note_on">
+			<return type="int" />
+			<param index="0" name="bank" type="int" />
+			<param index="1" name="preset_number" type="int" />
+			<param index="2" name="key" type="int" />
+			<param index="3" name="vel" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_pan">
+			<return type="float" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_pitch_range">
+			<return type="float" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_pitch_wheel">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_preset_bank">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_preset_index">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_preset_number">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_tuning">
+			<return type="float" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_get_volume">
+			<return type="float" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_midi_control">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="control" type="int" />
+			<param index="2" name="value" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_note_off">
+			<return type="void" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="key" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_note_off_all">
+			<return type="void" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_note_on">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="key" type="int" />
+			<param index="2" name="vel" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_bank">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="bank" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_bank_preset">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="bank" type="int" />
+			<param index="2" name="preset_number" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_pan">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="pan" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_pitch_range">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="pitch_range" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_pitch_wheel">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="pitch_wheel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_preset_index">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="preset_index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_preset_number">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="preset_number" type="int" />
+			<param index="2" name="flag_mididrums" type="int" default="0" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_tuning">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="tuning" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_set_volume">
+			<return type="int" />
+			<param index="0" name="channel" type="int" />
+			<param index="1" name="volume" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="channel_sounds_off_all">
+			<return type="void" />
+			<param index="0" name="channel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="copy">
+			<return type="SoundFont" />
+			<description>
+			</description>
+		</method>
+		<method name="get_global_gain_db">
+			<return type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="get_max_voice_num">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_out_sample_rate">
+			<return type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="get_output_mode">
+			<return type="int" enum="SoundFont.OutputMode" />
+			<description>
+			</description>
+		</method>
+		<method name="get_preset_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_preset_index">
+			<return type="int" />
+			<param index="0" name="bank" type="int" />
+			<param index="1" name="preset_number" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_preset_name">
+			<return type="String" />
+			<param index="0" name="preset_index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_preset_num">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_voice_num">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="load_file" qualifiers="static">
+			<return type="SoundFont" />
+			<param index="0" name="file" type="FileAccess" />
+			<description>
+			</description>
+		</method>
+		<method name="load_memory" qualifiers="static">
+			<return type="SoundFont" />
+			<param index="0" name="buffer" type="PackedByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="load_path" qualifiers="static">
+			<return type="SoundFont" />
+			<param index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="note_off">
+			<return type="void" />
+			<param index="0" name="preset_index" type="int" />
+			<param index="1" name="key" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="note_off_all">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="note_on">
+			<return type="int" />
+			<param index="0" name="preset_index" type="int" />
+			<param index="1" name="key" type="int" />
+			<param index="2" name="vel" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="render_float">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="samples" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="render_short">
+			<return type="PackedByteArray" />
+			<param index="0" name="samples" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="reset">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="set_global_gain_db">
+			<return type="void" />
+			<param index="0" name="global_gain_db" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_max_voice_num">
+			<return type="void" />
+			<param index="0" name="max_voice_num" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_max_voices">
+			<return type="int" />
+			<param index="0" name="max_voices" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_out_sample_rate">
+			<return type="void" />
+			<param index="0" name="out_sample_rate" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_output">
+			<return type="void" />
+			<param index="0" name="outputmode" type="int" enum="SoundFont.OutputMode" />
+			<param index="1" name="sample_rate" type="int" />
+			<param index="2" name="global_gain_db" type="float" default="0" />
+			<description>
+			</description>
+		</method>
+		<method name="set_output_mode">
+			<return type="void" />
+			<param index="0" name="outputmode" type="int" enum="SoundFont.OutputMode" />
+			<description>
+			</description>
+		</method>
+		<method name="set_preset_num">
+			<return type="void" />
+			<param index="0" name="preset_num" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_voice_num">
+			<return type="void" />
+			<param index="0" name="voice_num" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_volume">
+			<return type="void" />
+			<param index="0" name="global_gain" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="OUTPUT_STEREO_INTERLEAVED" value="0" enum="OutputMode">
+		</constant>
+		<constant name="OUTPUT_STEREO_UNWEAVED" value="1" enum="OutputMode">
+		</constant>
+		<constant name="OUTPUT_MONO" value="2" enum="OutputMode">
+		</constant>
+	</constants>
+</class>
