@@ -19,15 +19,15 @@ static Ref<SoundFont> new_from_tsf(tsf *f) {
 	sf->set_output(SoundFont::OUTPUT_MONO, 44100);
 	return sf;
 }
-Ref<SoundFont> SoundFont::load_path(const String &p_path) {
+Ref<SoundFont> SoundFont::create_from_path(const String &p_path) {
 	return new_from_tsf(load_from_path_tsf(p_path));
 }
 
-Ref<SoundFont> SoundFont::load_file(Ref<FileAccess> file) {
+Ref<SoundFont> SoundFont::create_from_file(Ref<FileAccess> file) {
 	return new_from_tsf(load_from_file_tsf(file));
 }
 
-Ref<SoundFont> SoundFont::load_memory(const PackedByteArray &buffer) {
+Ref<SoundFont> SoundFont::create_from_memory(const PackedByteArray &buffer) {
 	return new_from_tsf(load_from_memory_tsf(buffer));
 }
 
@@ -193,8 +193,9 @@ int SoundFont::active_voice_count() {
 PackedByteArray SoundFont::render_short(int samples) {
 	int flag_mixing = 0;
 	int size = samples * (_tsf->outputmode == TSFOutputMode::TSF_MONO ? 1 : 2);
-	short buffer[size];
-	tsf_render_short(_tsf, buffer, samples, flag_mixing);
+	Vector<short> buffer;
+	buffer.resize(size);
+	tsf_render_short(_tsf, buffer.ptrw(), samples, flag_mixing);
 	// 16bit short buffer to byte array
 	PackedByteArray array = PackedByteArray();
 	array.resize(size * 2);
@@ -311,9 +312,9 @@ void SoundFont::_bind_methods() {
 	BIND_ENUM_CONSTANT(OUTPUT_STEREO_UNWEAVED);
 	BIND_ENUM_CONSTANT(OUTPUT_MONO);
 
-	ClassDB::bind_static_method("SoundFont", D_METHOD("load_path", "path"), &SoundFont::load_path);
-	ClassDB::bind_static_method("SoundFont", D_METHOD("load_file", "file"), &SoundFont::load_file);
-	ClassDB::bind_static_method("SoundFont", D_METHOD("load_memory", "buffer"), &SoundFont::load_memory);
+	ClassDB::bind_static_method("SoundFont", D_METHOD("load_path", "path"), &SoundFont::create_from_path);
+	ClassDB::bind_static_method("SoundFont", D_METHOD("load_file", "file"), &SoundFont::create_from_file);
+	ClassDB::bind_static_method("SoundFont", D_METHOD("load_memory", "buffer"), &SoundFont::create_from_memory);
 
 	ClassDB::bind_method(D_METHOD("get_preset_num"), &SoundFont::get_preset_num);
 	ClassDB::bind_method(D_METHOD("get_voice_num"), &SoundFont::get_voice_num);
@@ -367,4 +368,38 @@ void SoundFont::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("channel_get_pitch_wheel", "channel"), &SoundFont::channel_get_pitch_wheel);
 	ClassDB::bind_method(D_METHOD("channel_get_pitch_range", "channel"), &SoundFont::channel_get_pitch_range);
 	ClassDB::bind_method(D_METHOD("channel_get_tuning", "channel"), &SoundFont::channel_get_tuning);
+}
+
+Ref<Resource> ResourceFormatLoaderSoundFont::load(const String &p_path, const String &p_original_path, Error *r_error, bool p_use_sub_threads, float *r_progress, CacheMode p_cache_mode) {
+	if (r_error) {
+		*r_error = ERR_FILE_CANT_OPEN;
+	}
+
+	if (!FileAccess::exists(p_path)) {
+		*r_error = ERR_FILE_NOT_FOUND;
+		return Ref<Resource>();
+	}
+
+	Ref<SoundFont> sf = SoundFont::create_from_path(p_path);
+	if (r_error) {
+		*r_error = OK;
+	}
+	return sf;
+}
+
+void ResourceFormatLoaderSoundFont::get_recognized_extensions(List<String> *p_extensions) const {
+	p_extensions->push_back("sf2");
+	p_extensions->push_back("sf3");
+}
+
+bool ResourceFormatLoaderSoundFont::handles_type(const String &p_type) const {
+	return (p_type == "SoundFont");
+}
+
+String ResourceFormatLoaderSoundFont::get_resource_type(const String &p_path) const {
+	String el = p_path.get_extension().to_lower();
+	if (el == "sf2" || el == "sf3") {
+		return "SoundFont";
+	}
+	return "";
 }

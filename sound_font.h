@@ -1,11 +1,13 @@
 #pragma once
 
+#include "core/io/resource.h"
+#include "core/io/resource_loader.h"
 #include "sf_utils.h"
 
 using namespace godot;
 
-class SoundFont : public RefCounted {
-	GDCLASS(SoundFont, RefCounted);
+class SoundFont : public Resource {
+	GDCLASS(SoundFont, Resource);
 
 	tsf *_tsf = nullptr;
 
@@ -26,9 +28,9 @@ public:
 		return _tsf;
 	}
 
-	static Ref<SoundFont> load_path(const String &p_path);
-	static Ref<SoundFont> load_file(Ref<FileAccess> file);
-	static Ref<SoundFont> load_memory(const PackedByteArray &buffer);
+	static Ref<SoundFont> create_from_path(const String &p_path);
+	static Ref<SoundFont> create_from_file(Ref<FileAccess> file);
+	static Ref<SoundFont> create_from_memory(const PackedByteArray &buffer);
 
 	int get_preset_num();
 	int get_voice_num();
@@ -87,3 +89,11 @@ public:
 	void (*render_float_raw)(tsf *f, float *buffer, int samples, int flag_mixing) = tsf_render_float;
 };
 VARIANT_ENUM_CAST(SoundFont::OutputMode);
+
+class ResourceFormatLoaderSoundFont : public ResourceFormatLoader {
+public:
+	virtual Ref<Resource> load(const String &p_path, const String &p_original_path = "", Error *r_error = nullptr, bool p_use_sub_threads = false, float *r_progress = nullptr, CacheMode p_cache_mode = CACHE_MODE_REUSE) override;
+	virtual void get_recognized_extensions(List<String> *p_extensions) const override;
+	virtual bool handles_type(const String &p_type) const override;
+	virtual String get_resource_type(const String &p_path) const override;
+};

@@ -18,19 +18,19 @@ static Ref<Midi> new_from_tml(tml_message *tml) {
 	mid->tml_header = true;
 	return mid;
 }
-Ref<Midi> Midi::load_path(const String &p_path) {
+Ref<Midi> Midi::create_from_path(const String &p_path) {
 	return new_from_tml(load_from_path_tml(p_path));
 }
 
-Ref<Midi> Midi::load_file(Ref<FileAccess> file) {
+Ref<Midi> Midi::create_from_file(Ref<FileAccess> file) {
 	return new_from_tml(load_from_file_tml(file));
 }
 
-Ref<Midi> Midi::load_memory(const PackedByteArray &buffer) {
+Ref<Midi> Midi::create_from_memory(const PackedByteArray &buffer) {
 	return new_from_tml(load_from_memory_tml(buffer));
 }
 
-Ref<Midi> Midi::load_dicts(const Array &dicts) {
+Ref<Midi> Midi::create_from_dicts(const Array &dicts) {
 	if (dicts.size() == 0) {
 		return nullptr;
 	}
@@ -78,7 +78,7 @@ Ref<Midi> Midi::load_dicts(const Array &dicts) {
 	return new_from_tml(tml);
 }
 
-Ref<Midi> Midi::load_simple_array(const PackedByteArray &arr, int duration_ms, int channel, int vel) {
+Ref<Midi> Midi::create_simple_array(const PackedByteArray &arr, int duration_ms, int channel, int vel) {
 	if (arr.size() == 0) {
 		return nullptr;
 	}
@@ -102,7 +102,7 @@ Ref<Midi> Midi::load_simple_array(const PackedByteArray &arr, int duration_ms, i
 	return new_from_tml(tml);
 }
 
-Ref<Midi> Midi::load_simple_time_array(const PackedByteArray &notes, const PackedInt32Array &times, int duration_ms, int channel, int vel) {
+Ref<Midi> Midi::create_simple_time_array(const PackedByteArray &notes, const PackedInt32Array &times, int duration_ms, int channel, int vel) {
 	if (notes.size() == 0) {
 		return nullptr;
 	}
@@ -420,12 +420,12 @@ void Midi::_bind_methods() {
 	BIND_ENUM_CONSTANT(InfoKeys::K_TIME_LENGTH);
 	BIND_ENUM_CONSTANT(InfoKeys::K_NOTE_COUNT);
 
-	ClassDB::bind_static_method("Midi", D_METHOD("load_path", "path"), &Midi::load_path);
-	ClassDB::bind_static_method("Midi", D_METHOD("load_file", "file"), &Midi::load_file);
-	ClassDB::bind_static_method("Midi", D_METHOD("load_memory", "buffer"), &Midi::load_memory);
-	ClassDB::bind_static_method("Midi", D_METHOD("load_dicts", "dicts"), &Midi::load_dicts);
-	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_array", "arr", "duration_ms", "channel", "vel"), &Midi::load_simple_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
-	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_time_array", "notes", "times", "duration_ms", "channel", "vel"), &Midi::load_simple_time_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
+	ClassDB::bind_static_method("Midi", D_METHOD("load_path", "path"), &Midi::create_from_path);
+	ClassDB::bind_static_method("Midi", D_METHOD("load_file", "file"), &Midi::create_from_file);
+	ClassDB::bind_static_method("Midi", D_METHOD("load_memory", "buffer"), &Midi::create_from_memory);
+	ClassDB::bind_static_method("Midi", D_METHOD("load_dicts", "dicts"), &Midi::create_from_dicts);
+	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_array", "arr", "duration_ms", "channel", "vel"), &Midi::create_simple_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
+	ClassDB::bind_static_method("Midi", D_METHOD("load_simple_time_array", "notes", "times", "duration_ms", "channel", "vel"), &Midi::create_simple_time_array, DEFVAL(600), DEFVAL(0), DEFVAL(100));
 
 	ClassDB::bind_method(D_METHOD("to_dicts", "len"), &Midi::to_dicts, DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("to_simple_array", "selected_channel"), &Midi::to_simple_array, DEFVAL(-1));
@@ -438,4 +438,37 @@ void Midi::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("render_all", "sf"), &Midi::render_all);
 	ClassDB::bind_method(D_METHOD("render_current", "sf"), &Midi::render_current);
 	ClassDB::bind_method(D_METHOD("is_tml_header"), &Midi::is_tml_header);
+}
+
+Ref<Resource> ResourceFormatLoaderMidi::load(const String &p_path, const String &p_original_path, Error *r_error, bool p_use_sub_threads, float *r_progress, CacheMode p_cache_mode) {
+	if (r_error) {
+		*r_error = ERR_FILE_CANT_OPEN;
+	}
+
+	if (!FileAccess::exists(p_path)) {
+		*r_error = ERR_FILE_NOT_FOUND;
+		return Ref<Resource>();
+	}
+
+	Ref<Midi> mid = Midi::create_from_path(p_path);
+	if (r_error) {
+		*r_error = OK;
+	}
+	return mid;
+}
+
+void ResourceFormatLoaderMidi::get_recognized_extensions(List<String> *p_extensions) const {
+	p_extensions->push_back("mid");
+}
+
+bool ResourceFormatLoaderMidi::handles_type(const String &p_type) const {
+	return (p_type == "Midi");
+}
+
+String ResourceFormatLoaderMidi::get_resource_type(const String &p_path) const {
+	String el = p_path.get_extension().to_lower();
+	if (el == "mid") {
+		return "Midi";
+	}
+	return "";
 }

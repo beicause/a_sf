@@ -6,5 +6,5 @@ Import("env")
 m_env = env.Clone()
 
 # Add source files.
-sources = [env.Glob("*.cpp"),env.Glob("stb/*.cpp")]
+sources = [env.Glob("*.cpp"), env.Glob("stb/*.cpp")]
 m_env.add_source_files(env.modules_sources, sources)

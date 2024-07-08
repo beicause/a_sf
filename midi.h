@@ -5,8 +5,8 @@
 
 using namespace godot;
 
-class Midi : public RefCounted {
-	GDCLASS(Midi, RefCounted);
+class Midi : public Resource {
+	GDCLASS(Midi, Resource);
 
 	tml_message *_tml = nullptr;
 
@@ -134,12 +134,12 @@ public:
 
 	bool is_tml_header() { return tml_header; };
 
-	static Ref<Midi> load_path(const String &p_path);
-	static Ref<Midi> load_file(Ref<FileAccess> file);
-	static Ref<Midi> load_memory(const PackedByteArray &buffer);
-	static Ref<Midi> load_dicts(const Array &dicts);
-	static Ref<Midi> load_simple_array(const PackedByteArray &arr, int duration_ms = 600, int channel = 0, int vel = 100);
-	static Ref<Midi> load_simple_time_array(const PackedByteArray &notes, const PackedInt32Array &times, int duration_ms = 600, int channel = 0, int vel = 100);
+	static Ref<Midi> create_from_path(const String &p_path);
+	static Ref<Midi> create_from_file(Ref<FileAccess> file);
+	static Ref<Midi> create_from_memory(const PackedByteArray &buffer);
+	static Ref<Midi> create_from_dicts(const Array &dicts);
+	static Ref<Midi> create_simple_array(const PackedByteArray &arr, int duration_ms = 600, int channel = 0, int vel = 100);
+	static Ref<Midi> create_simple_time_array(const PackedByteArray &notes, const PackedInt32Array &times, int duration_ms = 600, int channel = 0, int vel = 100);
 
 	Array to_dicts(int len = -1);
 	Array to_simple_array(int selected_channel = -1);
@@ -159,3 +159,11 @@ VARIANT_ENUM_CAST(Midi::MessageType);
 VARIANT_ENUM_CAST(Midi::Controller);
 VARIANT_ENUM_CAST(Midi::Keys);
 VARIANT_ENUM_CAST(Midi::InfoKeys);
+
+class ResourceFormatLoaderMidi : public ResourceFormatLoader {
+public:
+	virtual Ref<Resource> load(const String &p_path, const String &p_original_path = "", Error *r_error = nullptr, bool p_use_sub_threads = false, float *r_progress = nullptr, CacheMode p_cache_mode = CACHE_MODE_REUSE) override;
+	virtual void get_recognized_extensions(List<String> *p_extensions) const override;
+	virtual bool handles_type(const String &p_type) const override;
+	virtual String get_resource_type(const String &p_path) const override;
+};
